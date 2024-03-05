@@ -8,3 +8,13 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+dot:
+  jwt:
+    secretKey: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcwOTYwNTAwNywiaWF0IjoxNzA5NjA1MDA3fQ.FgWQ_xYYl8SUK42GiO7NXK8DSUiE47jHrcYDWw7pS00
+    authType: Bearer
+    authoritiesKey: Authorities
+    accessTokenHeader: Authorization
+    refreshTokenHeader: X-REFRESH-TOKEN
+    accessTokenExpire: 86400000 # 1일
+    refreshTokenExpire: 604800000 # 7일
