@@ -2,6 +2,7 @@ package com.example.dot_backend.member.controller;
 
 import com.example.dot_backend.member.dto.SignupRequestDto;
 import com.example.dot_backend.member.service.MemberService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,8 @@ public class MemberController {
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
-
     @PostMapping("/signUp")
-    public ResponseEntity<Long> signUp(@RequestBody SignupRequestDto signupRequestDto) throws Exception {
+    public ResponseEntity<Long> signUp(@RequestBody @Valid SignupRequestDto signupRequestDto) throws Exception {
         try{
             Long memberId = memberService.signUp(signupRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(memberId);
