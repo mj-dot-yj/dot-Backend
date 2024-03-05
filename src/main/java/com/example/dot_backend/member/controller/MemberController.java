@@ -1,5 +1,7 @@
 package com.example.dot_backend.member.controller;
 
+import com.example.dot_backend.jwt.JwtToken;
+import com.example.dot_backend.member.dto.LoginRequestDto;
 import com.example.dot_backend.member.dto.SignupRequestDto;
 import com.example.dot_backend.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -28,5 +30,11 @@ public class MemberController {
         } catch (Exception e){
             throw new Exception("failed to register");
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtToken> login(@RequestBody LoginRequestDto loginRequestDto) {
+        JwtToken jwtToken = memberService.login(loginRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
     }
 }
