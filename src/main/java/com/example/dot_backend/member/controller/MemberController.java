@@ -1,5 +1,6 @@
 package com.example.dot_backend.member.controller;
 
+import com.example.dot_backend.common.ApiResponse;
 import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.member.dto.LoginRequestDto;
 import com.example.dot_backend.member.dto.SignupRequestDto;
@@ -22,24 +23,25 @@ public class MemberController {
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
+
     @PostMapping("/signUp")
-    public ResponseEntity<Long> signUp(@RequestBody @Valid SignupRequestDto signupRequestDto) throws Exception {
-        try{
+    public ResponseEntity<ApiResponse<Long>> signUp(@RequestBody @Valid SignupRequestDto signupRequestDto) {
+        try {
             Long memberId = memberService.signUp(signupRequestDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(memberId);
-        } catch (Exception e){
-            throw new Exception("failed to register");
+            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(memberId));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.onFailure("failed to register"));
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtToken> login(@RequestBody LoginRequestDto loginRequestDto) throws Exception{
-        try{
+    public ResponseEntity<ApiResponse<JwtToken>> login(@RequestBody LoginRequestDto loginRequestDto) {
+        try {
             JwtToken jwtToken = memberService.login(loginRequestDto);
             memberService.updateLoginDate(loginRequestDto);
-            return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
-        } catch (Exception e){
-            throw new Exception("failed to login");
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(jwtToken));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.onFailure("failed to login"));
         }
     }
 }
