@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Data
@@ -32,8 +32,8 @@ public class SignupRequestDto {
                 .password(this.password)
                 .name(this.name)
                 .phone(this.phone)
-                .createdDate(LocalDate.now())
-                .updatedDate(LocalDate.now())
+                .createdDate(LocalDateTime.now())
+                .updatedDate(LocalDateTime.now())
                 .role(Role.ROLE_USER)
                 .build();
     }

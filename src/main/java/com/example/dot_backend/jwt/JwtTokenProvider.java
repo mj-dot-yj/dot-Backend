@@ -21,21 +21,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
-    @Value("${dot.jwt.authoritiesKey}")
-    private String AUTHORITIES_KEY;
-
-    @Value("${dot.jwt.authType}")
-    private String AUTH_TYPE;
-
-    @Value("${dot.jwt.accessTokenExpire}")
-    private long ACCESS_TOKEN_EXPIRE_TIME;
-
-    @Value("${dot.jwt.refreshTokenExpire}")
-    private long REFRESH_TOKEN_EXPIRE_TIME;
+    private final JwtProperties jwtProperties;
 
     private final Key key;
 
-    public JwtTokenProvider(@Value("${dot.jwt.secretKey}") String secretKey) {
+    public JwtTokenProvider(@Value("${dot.jwt.secretKey}") String secretKey, JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
         byte[] keyBytes = secretKey.getBytes();
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -49,23 +40,23 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // access token 생성
-        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        Date accessTokenExpiresIn = new Date(now + jwtProperties.getAccessTokenExpire());
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .claim(jwtProperties.getAuthoritiesKey(), authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         //refresh token 생성
-        Date refreshTokenExpiresIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+        Date refreshTokenExpiresIn = new Date(now + jwtProperties.getRefreshTokenExpire());
         String refreshToken = Jwts.builder()
                 .setExpiration(refreshTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         return JwtToken.builder()
-                .grantType(AUTH_TYPE)
+                .grantType(jwtProperties.getAuthType())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -75,11 +66,11 @@ public class JwtTokenProvider {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get(AUTHORITIES_KEY) == null) {
+        if (claims.get(jwtProperties.getAuthoritiesKey()) == null) {
             throw new RuntimeException("Token with no permissions information");
         }
 
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(jwtProperties.getAuthoritiesKey()).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
