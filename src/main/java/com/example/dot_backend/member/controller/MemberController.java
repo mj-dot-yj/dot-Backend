@@ -33,8 +33,13 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtToken> login(@RequestBody LoginRequestDto loginRequestDto) {
-        JwtToken jwtToken = memberService.login(loginRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+    public ResponseEntity<JwtToken> login(@RequestBody LoginRequestDto loginRequestDto) throws Exception{
+        try{
+            JwtToken jwtToken = memberService.login(loginRequestDto);
+            memberService.updateLoginDate(loginRequestDto);
+            return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+        } catch (Exception e){
+            throw new Exception("failed to login");
+        }
     }
 }
