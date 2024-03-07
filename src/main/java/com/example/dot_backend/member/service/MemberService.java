@@ -49,4 +49,10 @@ public class MemberService {
 
         return jwtTokenProvider.generateTokenDto(authentication);
     }
+
+    @Transactional
+    public void updateLoginDate(LoginRequestDto loginRequestDto){
+        Member updateMember = memberRepository.findMemberByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new RuntimeException("no user"));
+        updateMember.updateLoginDate();
+    }
 }

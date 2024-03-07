@@ -1,6 +1,7 @@
 package com.example.dot_backend.config;
 
 import com.example.dot_backend.jwt.JwtFilter;
+import com.example.dot_backend.jwt.JwtProperties;
 import com.example.dot_backend.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProperties jwtProperties;
     private static final String[] ALLOW_URL = {"/", "/member/login", "/member/signUp/**", "/member/findPw/**"};
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, JwtProperties jwtProperties) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtProperties = jwtProperties;
     }
 
     @Bean
@@ -37,7 +40,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(Customizer.withDefaults())
-                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtTokenProvider, jwtProperties), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

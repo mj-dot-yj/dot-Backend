@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -24,16 +24,16 @@ public class Member {
     @Column
     private String phone;
     @Column
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
     @Column
-    private LocalDate updatedDate;
+    private LocalDateTime updatedDate;
     @Column
-    private LocalDate lastLoginDate;
+    private LocalDateTime lastLoginDate;
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
-    public Member(Long id, String email, String password, String name, String phone, LocalDate createdDate, LocalDate updatedDate, LocalDate lastLoginDate, Role role) {
+    public Member(Long id, String email, String password, String name, String phone, LocalDateTime createdDate, LocalDateTime updatedDate, LocalDateTime lastLoginDate, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -45,4 +45,7 @@ public class Member {
         this.role = role;
     }
 
+    public void updateLoginDate(){
+        this.lastLoginDate = LocalDateTime.now();
+    }
 }
