@@ -1,5 +1,6 @@
 package com.example.dot_backend.jwt;
 
+import com.example.dot_backend.config.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +24,11 @@ public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
 
     private final Key key;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public JwtTokenProvider(@Value("${dot.jwt.secretKey}") String secretKey, JwtProperties jwtProperties) {
+    public JwtTokenProvider(@Value("${dot.jwt.secretKey}") String secretKey, JwtProperties jwtProperties, CustomUserDetailsService customUserDetailsService) {
         this.jwtProperties = jwtProperties;
+        this.customUserDetailsService = customUserDetailsService;
         byte[] keyBytes = secretKey.getBytes();
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -74,9 +76,8 @@ public class JwtTokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject());
+        return new UsernamePasswordAuthenticationToken(userDetails, accessToken, userDetails.getAuthorities());
     }
 
     public boolean validateToken(String token) {

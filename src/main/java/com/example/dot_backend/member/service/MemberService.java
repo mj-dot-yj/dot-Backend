@@ -1,8 +1,10 @@
 package com.example.dot_backend.member.service;
 
+import com.example.dot_backend.config.CustomUserDetails;
 import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.jwt.JwtTokenProvider;
 import com.example.dot_backend.member.dto.LoginRequestDto;
+import com.example.dot_backend.member.dto.PasswordRequestDto;
 import com.example.dot_backend.member.dto.SignupRequestDto;
 import com.example.dot_backend.member.entity.Member;
 import com.example.dot_backend.member.repository.MemberRepository;
@@ -54,5 +56,9 @@ public class MemberService {
     public void updateLoginDate(LoginRequestDto loginRequestDto){
         Member updateMember = memberRepository.findMemberByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new RuntimeException("no user"));
         updateMember.updateLoginDate();
+    }
+
+    public boolean checkPassword(PasswordRequestDto passwordRequestDto, CustomUserDetails customUserDetails){
+        return passwordEncoder.matches(passwordRequestDto.getPassword(), customUserDetails.getPassword());
     }
 }

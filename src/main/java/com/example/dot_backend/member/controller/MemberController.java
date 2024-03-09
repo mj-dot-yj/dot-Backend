@@ -1,14 +1,17 @@
 package com.example.dot_backend.member.controller;
 
 import com.example.dot_backend.common.ApiResponse;
+import com.example.dot_backend.config.CustomUserDetails;
 import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.member.dto.LoginRequestDto;
+import com.example.dot_backend.member.dto.PasswordRequestDto;
 import com.example.dot_backend.member.dto.SignupRequestDto;
 import com.example.dot_backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,5 +35,14 @@ public class MemberController {
         JwtToken jwtToken = memberService.login(loginRequestDto);
         memberService.updateLoginDate(loginRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(jwtToken));
+    }
+
+    @PostMapping("/checkPassword")
+    public ResponseEntity<ApiResponse<String>> checkPassword(@RequestBody PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        boolean isMatched = memberService.checkPassword(passwordRequestDto, customUserDetails);
+        if (isMatched){
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.onFailure("Passwords do not match"));
     }
 }
