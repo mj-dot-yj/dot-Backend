@@ -45,4 +45,10 @@ public class MemberController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.onFailure("Passwords do not match"));
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse<String>> deleteMember(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        memberService.deleteMember(customUserDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
+    }
 }

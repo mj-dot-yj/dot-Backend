@@ -61,4 +61,9 @@ public class MemberService {
     public boolean checkPassword(PasswordRequestDto passwordRequestDto, CustomUserDetails customUserDetails){
         return passwordEncoder.matches(passwordRequestDto.getPassword(), customUserDetails.getPassword());
     }
+
+    public void deleteMember(String email){
+        Member deleteMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("no user"));
+        memberRepository.delete(deleteMember);
+    }
 }
