@@ -6,6 +6,7 @@ import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.member.dto.LoginRequestDto;
 import com.example.dot_backend.member.dto.PasswordRequestDto;
 import com.example.dot_backend.member.dto.SignupRequestDto;
+import com.example.dot_backend.member.entity.Member;
 import com.example.dot_backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,11 @@ public class MemberController {
     public ResponseEntity<ApiResponse<String>> deleteMember(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         memberService.deleteMember(customUserDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
+    }
+
+    @GetMapping("/info/{email")
+    public ResponseEntity<Member> findMemberByEmail(@PathVariable String email) {
+        Member member = memberService.findMemberByEmail(email);
+        return ResponseEntity.ok(member);
     }
 }

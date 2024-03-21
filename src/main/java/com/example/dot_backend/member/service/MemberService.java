@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -65,5 +67,11 @@ public class MemberService {
     public void deleteMember(String email){
         Member deleteMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("no user"));
         memberRepository.delete(deleteMember);
+    }
+
+    public Member findMemberByEmail(String email) {
+        Optional<Member> memberByEmail = memberRepository.findMemberByEmail(email);
+        Member member = memberByEmail.get();
+        return member;
     }
 }
