@@ -53,7 +53,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
     }
 
-    @GetMapping("/info/{email")
+    @GetMapping("/info/{email}")
     public ResponseEntity<Member> findMemberByEmail(@PathVariable String email) {
         Member member = memberService.findMemberByEmail(email);
         return ResponseEntity.ok(member);
