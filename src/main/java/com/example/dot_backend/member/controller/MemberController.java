@@ -53,9 +53,9 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
     }
 
-    @GetMapping("/info/{email}")
-    public ResponseEntity<Member> findMemberByEmail(@PathVariable String email) {
-        Member member = memberService.findMemberByEmail(email);
-        return ResponseEntity.ok(member);
+    @GetMapping("/info")
+    public ResponseEntity<ApiResponse<Member>> findMemberByEmail(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Member member = memberService.findMemberByEmail(customUserDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(member));
     }
 }

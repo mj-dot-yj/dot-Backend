@@ -70,8 +70,7 @@ public class MemberService {
     }
 
     public Member findMemberByEmail(String email) {
-        Optional<Member> memberByEmail = memberRepository.findMemberByEmail(email);
-        Member member = memberByEmail.get();
-        return member;
+        Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("no user"));
+        return findMember;
     }
 }
