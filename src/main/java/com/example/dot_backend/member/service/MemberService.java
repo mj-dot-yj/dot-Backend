@@ -4,6 +4,7 @@ import com.example.dot_backend.config.CustomUserDetails;
 import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.jwt.JwtTokenProvider;
 import com.example.dot_backend.member.dto.LoginRequestDto;
+import com.example.dot_backend.member.dto.MemberDto;
 import com.example.dot_backend.member.dto.PasswordRequestDto;
 import com.example.dot_backend.member.dto.SignupRequestDto;
 import com.example.dot_backend.member.entity.Member;
@@ -15,8 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -69,8 +68,12 @@ public class MemberService {
         memberRepository.delete(deleteMember);
     }
 
-    public Member findMemberByEmail(String email) {
+    public MemberDto findMemberByEmail(String email) {
         Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("no user"));
-        return findMember;
+        return MemberDto.builder()
+                .name(findMember.getName())
+                .email(findMember.getEmail())
+                .phone(findMember.getPhone())
+                .build();
     }
 }

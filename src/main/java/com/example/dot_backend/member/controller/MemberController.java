@@ -4,6 +4,7 @@ import com.example.dot_backend.common.ApiResponse;
 import com.example.dot_backend.config.CustomUserDetails;
 import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.member.dto.LoginRequestDto;
+import com.example.dot_backend.member.dto.MemberDto;
 import com.example.dot_backend.member.dto.PasswordRequestDto;
 import com.example.dot_backend.member.dto.SignupRequestDto;
 import com.example.dot_backend.member.entity.Member;
@@ -53,9 +54,9 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<ApiResponse<Member>> findMemberByEmail(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        Member member = memberService.findMemberByEmail(customUserDetails.getUsername());
+    @PostMapping("/info")
+    public ResponseEntity<ApiResponse<MemberDto>> findMemberByEmail(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        MemberDto member = memberService.findMemberByEmail(customUserDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(member));
     }
 }
