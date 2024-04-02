@@ -48,4 +48,11 @@ public class Member {
     public void updateLoginDate(){
         this.lastLoginDate = LocalDateTime.now();
     }
+
+    public void updateMember(String email, String password, String name, String phone) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+    }
 }
