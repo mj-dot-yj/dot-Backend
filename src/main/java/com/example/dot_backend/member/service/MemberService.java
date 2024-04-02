@@ -74,10 +74,11 @@ public class MemberService {
                 .build();
     }
 
-    public Long modifyMember(ModifyRequestDto modifyRequestDto) {
-        Member updateMember = memberRepository.findMemberByEmail(modifyRequestDto.getEmail()).orElseThrow(() -> new RuntimeException("no user"));
+    @Transactional
+    public Long modifyMember(String nowEmail, ModifyRequestDto modifyRequestDto) {
+        Member updateMember = memberRepository.findMemberByEmail(nowEmail).orElseThrow(() -> new RuntimeException("no user"));
+        modifyRequestDto.encodePassword(passwordEncoder.encode(modifyRequestDto.getPassword()));
         updateMember.updateMember(modifyRequestDto.getEmail(), modifyRequestDto.getPassword(), modifyRequestDto.getName(), modifyRequestDto.getPhone());
-        modifyRequestDto.encodePassword(passwordEncoder.encode(updateMember.getPassword()));
         return updateMember.getId();
     }
 }
