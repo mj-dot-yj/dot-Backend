@@ -3,11 +3,9 @@ package com.example.dot_backend.member.controller;
 import com.example.dot_backend.common.ApiResponse;
 import com.example.dot_backend.config.CustomUserDetails;
 import com.example.dot_backend.jwt.JwtToken;
-import com.example.dot_backend.member.dto.LoginRequestDto;
-import com.example.dot_backend.member.dto.MemberDto;
-import com.example.dot_backend.member.dto.PasswordRequestDto;
-import com.example.dot_backend.member.dto.SignupRequestDto;
+import com.example.dot_backend.member.dto.*;
 import com.example.dot_backend.member.entity.Member;
+import com.example.dot_backend.member.repository.MemberRepository;
 import com.example.dot_backend.member.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService,
+                            MemberRepository memberRepository) {
         this.memberService = memberService;
+        this.memberRepository = memberRepository;
     }
 
     @PostMapping("/signUp")
@@ -58,5 +59,11 @@ public class MemberController {
     public ResponseEntity<ApiResponse<MemberDto>> findMemberByEmail(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         MemberDto member = memberService.findMemberByEmail(customUserDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(member));
+    }
+
+    @PostMapping("/modify")
+    public ResponseEntity<ApiResponse<Long>> modifyMember(@RequestBody @Valid ModifyRequestDto modifyRequestDto) {
+        Long memberId = memberService.modifyMember(modifyRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(memberId));
     }
 }

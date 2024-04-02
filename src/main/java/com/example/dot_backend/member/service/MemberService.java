@@ -3,10 +3,7 @@ package com.example.dot_backend.member.service;
 import com.example.dot_backend.config.CustomUserDetails;
 import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.jwt.JwtTokenProvider;
-import com.example.dot_backend.member.dto.LoginRequestDto;
-import com.example.dot_backend.member.dto.MemberDto;
-import com.example.dot_backend.member.dto.PasswordRequestDto;
-import com.example.dot_backend.member.dto.SignupRequestDto;
+import com.example.dot_backend.member.dto.*;
 import com.example.dot_backend.member.entity.Member;
 import com.example.dot_backend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -75,5 +72,12 @@ public class MemberService {
                 .email(findMember.getEmail())
                 .phone(findMember.getPhone())
                 .build();
+    }
+
+    public Long modifyMember(ModifyRequestDto modifyRequestDto) {
+        Member updateMember = memberRepository.findMemberByEmail(modifyRequestDto.getEmail()).orElseThrow(() -> new RuntimeException("no user"));
+        updateMember.updateMember(modifyRequestDto.getEmail(), modifyRequestDto.getPassword(), modifyRequestDto.getName(), modifyRequestDto.getPhone());
+        modifyRequestDto.encodePassword(passwordEncoder.encode(updateMember.getPassword()));
+        return updateMember.getId();
     }
 }
