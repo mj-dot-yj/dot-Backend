@@ -30,14 +30,14 @@ public class MemberService {
     }
 
     @Transactional
-    public Long signUp(SignupRequestDto signupRequestDto) {
-        boolean isDuplicated = memberRepository.findMemberByEmail(signupRequestDto.getEmail()).isPresent();
+    public Long signUp(MemberInfoRequestDto memberInfoRequestDto) {
+        boolean isDuplicated = memberRepository.findMemberByEmail(memberInfoRequestDto.getEmail()).isPresent();
         if (isDuplicated) {
             throw new RuntimeException("duplicated email");
         }
 
-        signupRequestDto.encodePassword(passwordEncoder.encode(signupRequestDto.getPassword()));
-        Member savedMember = memberRepository.save(signupRequestDto.toSaveMember());
+        memberInfoRequestDto.encodePassword(passwordEncoder.encode(memberInfoRequestDto.getPassword()));
+        Member savedMember = memberRepository.save(memberInfoRequestDto.toSaveMember());
         return savedMember.getId();
     }
 
@@ -78,10 +78,10 @@ public class MemberService {
     }
 
     @Transactional
-    public Long modifyMember(ModifyRequestDto modifyRequestDto, Long idx) {
+    public Long modifyMember(MemberInfoRequestDto memberInfoRequestDto, Long idx) {
         Member updateMember = memberRepository.findById(idx).orElseThrow(() -> new RuntimeException("no user"));
-        modifyRequestDto.encodePassword(passwordEncoder.encode(modifyRequestDto.getPassword()));
-        updateMember.updateMember(modifyRequestDto.getEmail(), modifyRequestDto.getPassword(), modifyRequestDto.getName(), modifyRequestDto.getPhone());
+        memberInfoRequestDto.encodePassword(passwordEncoder.encode(memberInfoRequestDto.getPassword()));
+        updateMember.updateMember(memberInfoRequestDto.getEmail(), memberInfoRequestDto.getPassword(), memberInfoRequestDto.getName(), memberInfoRequestDto.getPhone());
 
         return updateMember.getId();
     }

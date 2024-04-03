@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Data
-public class SignupRequestDto {
+public class MemberInfoRequestDto {
     @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "Check your email")
     private String email;
     @Pattern(regexp = "^[A-Za-z0-9]{6,12}$", message = "Check your password")
@@ -39,7 +39,7 @@ public class SignupRequestDto {
     }
 
     @Builder
-    public SignupRequestDto(String email, String password, String name, String phone) {
+    public MemberInfoRequestDto(String email, String password, String name, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;

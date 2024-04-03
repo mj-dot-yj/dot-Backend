@@ -22,8 +22,8 @@ public class MemberController {
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<ApiResponse<Long>> signUp(@RequestBody @Valid SignupRequestDto signupRequestDto) {
-        Long memberId = memberService.signUp(signupRequestDto);
+    public ResponseEntity<ApiResponse<Long>> signUp(@RequestBody @Valid MemberInfoRequestDto memberInfoRequestDto) {
+        Long memberId = memberService.signUp(memberInfoRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(memberId));
     }
 
@@ -57,8 +57,9 @@ public class MemberController {
     }
 
     @PostMapping("/modify/{idx}")
-    public ResponseEntity<ApiResponse<Long>> modifyMember(@RequestBody ModifyRequestDto modifyRequestDto, @PathVariable Long idx) {
-        Long memberId = memberService.modifyMember(modifyRequestDto, idx);
+    public ResponseEntity<ApiResponse<Long>> modifyMember(@RequestBody @Valid MemberInfoRequestDto memberInfoRequestDto,
+                                                          @PathVariable Long idx) {
+        Long memberId = memberService.modifyMember(memberInfoRequestDto, idx);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(memberId));
     }
 }
