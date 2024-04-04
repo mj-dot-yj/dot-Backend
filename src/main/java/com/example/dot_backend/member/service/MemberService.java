@@ -30,24 +30,27 @@ public class MemberService {
     }
 
     @Transactional
-    public Long signUp(SignupRequestDto signupRequestDto) {
-        boolean isDuplicated = memberRepository.findMemberByEmail(signupRequestDto.getEmail()).isPresent();
+    public Long signUp(MemberInfoRequestDto memberInfoRequestDto) {
+        boolean isDuplicated = memberRepository.findMemberByEmail(memberInfoRequestDto.getEmail()).isPresent();
         if (isDuplicated) {
             throw new RuntimeException("duplicated email");
         }
 
-        signupRequestDto.encodePassword(passwordEncoder.encode(signupRequestDto.getPassword()));
-        Member savedMember = memberRepository.save(signupRequestDto.toSaveMember());
+        memberInfoRequestDto.encodePassword(passwordEncoder.encode(memberInfoRequestDto.getPassword()));
+        Member savedMember = memberRepository.save(memberInfoRequestDto.toSaveMember());
         return savedMember.getId();
     }
 
     @Transactional
-    public JwtToken login(LoginRequestDto loginRequestDto) {
+    public TokenResponseDto login(LoginRequestDto loginRequestDto) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        return jwtTokenProvider.generateTokenDto(authentication);
+        JwtToken jwtToken = jwtTokenProvider.generateTokenDto(authentication);
+        Member member = memberRepository.findMemberByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new RuntimeException("no user"));
+
+        return new TokenResponseDto(member.getId(), jwtToken);
     }
 
     @Transactional
@@ -60,13 +63,13 @@ public class MemberService {
         return passwordEncoder.matches(passwordRequestDto.getPassword(), customUserDetails.getPassword());
     }
 
-    public void deleteMember(String email){
-        Member deleteMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("no user"));
+    public void deleteMember(Long idx){
+        Member deleteMember = memberRepository.findById(idx).orElseThrow(() -> new RuntimeException("no user"));
         memberRepository.delete(deleteMember);
     }
 
-    public MemberDto findMemberByEmail(String email) {
-        Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("no user"));
+    public MemberDto findMemberByEmail(Long idx) {
+        Member findMember = memberRepository.findById(idx).orElseThrow(() -> new RuntimeException("no user"));
         return MemberDto.builder()
                 .name(findMember.getName())
                 .email(findMember.getEmail())
@@ -75,10 +78,11 @@ public class MemberService {
     }
 
     @Transactional
-    public Long modifyMember(String nowEmail, ModifyRequestDto modifyRequestDto) {
-        Member updateMember = memberRepository.findMemberByEmail(nowEmail).orElseThrow(() -> new RuntimeException("no user"));
-        modifyRequestDto.encodePassword(passwordEncoder.encode(modifyRequestDto.getPassword()));
-        updateMember.updateMember(modifyRequestDto.getEmail(), modifyRequestDto.getPassword(), modifyRequestDto.getName(), modifyRequestDto.getPhone());
+    public Long modifyMember(MemberInfoRequestDto memberInfoRequestDto, Long idx) {
+        Member updateMember = memberRepository.findById(idx).orElseThrow(() -> new RuntimeException("no user"));
+        memberInfoRequestDto.encodePassword(passwordEncoder.encode(memberInfoRequestDto.getPassword()));
+        updateMember.updateMember(memberInfoRequestDto.getEmail(), memberInfoRequestDto.getPassword(), memberInfoRequestDto.getName(), memberInfoRequestDto.getPhone());
+
         return updateMember.getId();
     }
 }

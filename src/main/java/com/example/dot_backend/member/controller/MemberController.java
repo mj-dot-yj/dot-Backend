@@ -2,7 +2,6 @@ package com.example.dot_backend.member.controller;
 
 import com.example.dot_backend.common.ApiResponse;
 import com.example.dot_backend.config.CustomUserDetails;
-import com.example.dot_backend.jwt.JwtToken;
 import com.example.dot_backend.member.dto.*;
 import com.example.dot_backend.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -23,20 +22,21 @@ public class MemberController {
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<ApiResponse<Long>> signUp(@RequestBody @Valid SignupRequestDto signupRequestDto) {
-        Long memberId = memberService.signUp(signupRequestDto);
+    public ResponseEntity<ApiResponse<Long>> signUp(@RequestBody @Valid MemberInfoRequestDto memberInfoRequestDto) {
+        Long memberId = memberService.signUp(memberInfoRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(memberId));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<JwtToken>> login(@RequestBody LoginRequestDto loginRequestDto) {
-        JwtToken jwtToken = memberService.login(loginRequestDto);
+    public ResponseEntity<ApiResponse<TokenResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
+        TokenResponseDto tokenResponseDto = memberService.login(loginRequestDto);
         memberService.updateLoginDate(loginRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(jwtToken));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(tokenResponseDto));
     }
 
     @PostMapping("/checkPassword")
-    public ResponseEntity<ApiResponse<String>> checkPassword(@RequestBody PasswordRequestDto passwordRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<ApiResponse<String>> checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
+                                                             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         boolean isMatched = memberService.checkPassword(passwordRequestDto, customUserDetails);
         if (isMatched){
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
@@ -44,22 +44,22 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.onFailure("Passwords do not match"));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<ApiResponse<String>> deleteMember(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        memberService.deleteMember(customUserDetails.getUsername());
+    @DeleteMapping("/delete/{idx}")
+    public ResponseEntity<ApiResponse<String>> deleteMember(@PathVariable Long idx) {
+        memberService.deleteMember(idx);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
     }
 
-    @PostMapping("/info")
-    public ResponseEntity<ApiResponse<MemberDto>> findMemberByEmail(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        MemberDto member = memberService.findMemberByEmail(customUserDetails.getUsername());
+    @PostMapping("/info/{idx}")
+    public ResponseEntity<ApiResponse<MemberDto>> findMemberByEmail(@PathVariable Long idx) {
+        MemberDto member = memberService.findMemberByEmail(idx);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(member));
     }
 
-    @PostMapping("/modify")
-    public ResponseEntity<ApiResponse<Long>> modifyMember(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                                          @RequestBody ModifyRequestDto modifyRequestDto) {
-        Long memberId = memberService.modifyMember(customUserDetails.getUsername(), modifyRequestDto);
+    @PostMapping("/modify/{idx}")
+    public ResponseEntity<ApiResponse<Long>> modifyMember(@RequestBody @Valid MemberInfoRequestDto memberInfoRequestDto,
+                                                          @PathVariable Long idx) {
+        Long memberId = memberService.modifyMember(memberInfoRequestDto, idx);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(memberId));
     }
 }
