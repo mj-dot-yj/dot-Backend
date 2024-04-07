@@ -1,6 +1,7 @@
 package com.example.dot_backend.todo.service;
 
 import com.example.dot_backend.todo.dto.TodoRequestDto;
+import com.example.dot_backend.todo.dto.TodoResponseDto;
 import com.example.dot_backend.todo.entity.Todo;
 import com.example.dot_backend.todo.repository.TodoRepository;
 import jakarta.transaction.Transactional;
@@ -20,5 +21,10 @@ public class TodoService {
     public Long saveTodo(TodoRequestDto todoRequestDto) {
         Todo todo = todoRepository.save(todoRequestDto.toSaveTodo());
         return todo.getId();
+    }
+
+    public TodoResponseDto findTodoById(Long id) {
+        Todo todo = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
+        return todo.getTodoResponseDto();
     }
 }

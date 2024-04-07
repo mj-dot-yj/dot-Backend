@@ -1,5 +1,6 @@
 package com.example.dot_backend.todo.entity;
 
+import com.example.dot_backend.todo.dto.TodoResponseDto;
 import com.example.dot_backend.todo.enums.Priority;
 import com.example.dot_backend.todo.enums.State;
 import jakarta.persistence.*;
@@ -53,4 +54,18 @@ public class Todo {
         this.state = state;
     }
 
+    public TodoResponseDto getTodoResponseDto() {
+        return TodoResponseDto.builder()
+                .id(this.id)
+                .user_id(this.user_id)
+                .title(this.title)
+                .content(this.content)
+                .start_time(this.start_time)
+                .end_time(this.end_time)
+                .alarmed(this.alarmed)
+                .priority(this.priority)
+                .state(this.state)
+                .todo_date(this.todo_date)
+                .build();
+    }
 }
