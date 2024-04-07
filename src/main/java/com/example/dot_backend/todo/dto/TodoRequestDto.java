@@ -23,6 +23,7 @@ public class TodoRequestDto {
     private Long alarmed;
     private Priority priority;
     private LocalDate todoDate;
+    private State state;
 
     public Todo toSaveTodo() {
         return Todo.builder()
@@ -39,7 +40,7 @@ public class TodoRequestDto {
                 .build();
     }
 
-    public TodoRequestDto(Long user_id, String title, String content, LocalTime start_time, LocalTime end_time, Long alarmed, Priority priority, LocalDate todo_date) {
+    public TodoRequestDto(Long user_id, String title, String content, LocalTime start_time, LocalTime end_time, Long alarmed, Priority priority, LocalDate todo_date, State state) {
         this.userId = user_id;
         this.title = title;
         this.content = content;
@@ -48,5 +49,6 @@ public class TodoRequestDto {
         this.alarmed = alarmed;
         this.priority = priority;
         this.todoDate = todo_date;
+        this.state = state;
     }
 }

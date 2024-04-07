@@ -37,4 +37,16 @@ public class TodoController {
         todoService.deleteTodo(idx);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
     }
+
+    @PostMapping("/modify/{idx}")
+    public ResponseEntity<ApiResponse<Long>> modifyTodo(@PathVariable Long idx, @RequestBody TodoRequestDto todoRequestDto) {
+        Long todoId = todoService.modifyTodo(idx, todoRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(todoId));
+    }
+
+    @PostMapping("/modify/state/{idx}")
+    public ResponseEntity<ApiResponse<Long>> modifyTodoState(@PathVariable Long idx, @RequestBody TodoRequestDto todoRequestDto) {
+        Long todoId = todoService.modifyTodoState(idx, todoRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(todoId));
+    }
 }

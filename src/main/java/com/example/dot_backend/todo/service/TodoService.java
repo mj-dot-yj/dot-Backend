@@ -33,4 +33,18 @@ public class TodoService {
         Todo todoDeleted = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
         todoRepository.delete(todoDeleted);
     }
+
+    @Transactional
+    public Long modifyTodo(Long id, TodoRequestDto todoRequestDto) {
+        Todo todo = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
+        todo.updateTodo(todoRequestDto);
+        return todo.getId();
+    }
+
+    @Transactional
+    public Long modifyTodoState(Long id, TodoRequestDto todoRequestDto) {
+        Todo todo = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
+        todo.updateState(todoRequestDto.getState());
+        return todo.getId();
+    }
 }

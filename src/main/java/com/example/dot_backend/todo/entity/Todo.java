@@ -53,6 +53,7 @@ public class Todo {
 
     public void updateState(State state) {
         this.state = state;
+        this.updatedDate = LocalDateTime.now();
     }
 
     public TodoResponseDto getTodoResponseDto() {
