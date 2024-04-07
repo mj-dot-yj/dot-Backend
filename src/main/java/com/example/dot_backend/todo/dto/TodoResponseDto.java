@@ -14,13 +14,13 @@ import java.time.LocalTime;
 @Builder
 public class TodoResponseDto {
     private Long id;
-    private Long user_id;
+    private Long userId;
     private String title;
     private String content;
-    private LocalTime start_time;
-    private LocalTime end_time;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Long alarmed;
     private Priority priority;
     private State state;
-    private LocalDate todo_date;
+    private LocalDate todoDate;
 }
