@@ -31,4 +31,10 @@ public class TodoController {
         TodoResponseDto todoResponseDto = todoService.findTodoById(idx);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(todoResponseDto));
     }
+
+    @DeleteMapping("/delete/{idx}")
+    public ResponseEntity<ApiResponse<String>> deleteTodo(@PathVariable Long idx) {
+        todoService.deleteTodo(idx);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess("Success"));
+    }
 }

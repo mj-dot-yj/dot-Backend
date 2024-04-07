@@ -27,4 +27,10 @@ public class TodoService {
         Todo todo = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
         return todo.getTodoResponseDto();
     }
+
+    @Transactional
+    public void deleteTodo(Long id){
+        Todo todoDeleted = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
+        todoRepository.delete(todoDeleted);
+    }
 }
