@@ -1,5 +1,7 @@
 package com.example.dot_backend.todo.entity;
 
+import com.example.dot_backend.todo.dto.TodoRequestDto;
+import com.example.dot_backend.todo.dto.TodoResponseDto;
 import com.example.dot_backend.todo.enums.Priority;
 import com.example.dot_backend.todo.enums.State;
 import jakarta.persistence.*;
@@ -23,34 +25,49 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long user_id;
+    private Long userId;
     private String title;
     private String content;
-    private LocalTime start_time;
-    private LocalTime end_time;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Long alarmed;
-    private LocalDateTime created_date;
-    private LocalDateTime updated_date;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     @Enumerated(EnumType.STRING)
     private Priority priority;
     @Enumerated(EnumType.STRING)
     private State state;
-    private LocalDate todo_date;
+    private LocalDate todoDate;
 
 
-    public void updateTodo(String title, String content, Priority priority, LocalDate todo_date, Long alarmed, LocalTime start_time, LocalTime end_time) {
-        this.title = title;
-        this.content = content;
-        this.priority = priority;
-        this.todo_date = todo_date;
-        this.alarmed = alarmed;
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.updated_date = LocalDateTime.now();
+    public void updateTodo(TodoRequestDto todoRequestDto) {
+        this.title = todoRequestDto.getTitle();
+        this.content = todoRequestDto.getContent();
+        this.priority = todoRequestDto.getPriority();
+        this.todoDate = todoRequestDto.getTodoDate();
+        this.alarmed = todoRequestDto.getAlarmed();
+        this.startTime = todoRequestDto.getStartTime();
+        this.endTime = todoRequestDto.getEndTime();
+        this.updatedDate = LocalDateTime.now();
     }
 
     public void updateState(State state) {
         this.state = state;
+        this.updatedDate = LocalDateTime.now();
     }
 
+    public TodoResponseDto getTodoResponseDto() {
+        return TodoResponseDto.builder()
+                .id(this.id)
+                .userId(this.userId)
+                .title(this.title)
+                .content(this.content)
+                .startTime(this.startTime)
+                .endTime(this.endTime)
+                .alarmed(this.alarmed)
+                .priority(this.priority)
+                .state(this.state)
+                .todoDate(this.todoDate)
+                .build();
+    }
 }

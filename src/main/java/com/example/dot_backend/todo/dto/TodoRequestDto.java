@@ -15,38 +15,40 @@ import java.time.LocalTime;
 @Data
 @Builder
 public class TodoRequestDto {
-    private Long user_id;
+    private Long userId;
     private String title;
     private String content;
-    private LocalTime start_time;
-    private LocalTime end_time;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Long alarmed;
     private Priority priority;
-    private LocalDate todo_date;
+    private LocalDate todoDate;
+    private State state;
 
     public Todo toSaveTodo() {
         return Todo.builder()
-                .user_id(this.user_id)
+                .userId(this.userId)
                 .title(this.title)
                 .content(this.content)
-                .start_time(this.start_time)
-                .end_time(this.end_time)
+                .startTime(this.startTime)
+                .endTime(this.endTime)
                 .alarmed(this.alarmed)
                 .priority(this.priority)
                 .state(State.IN_PROGRESS)
-                .todo_date(this.todo_date)
-                .created_date(LocalDateTime.now())
+                .todoDate(this.todoDate)
+                .createdDate(LocalDateTime.now())
                 .build();
     }
 
-    public TodoRequestDto(Long user_id, String title, String content, LocalTime start_time, LocalTime end_time, Long alarmed, Priority priority, LocalDate todo_date) {
-        this.user_id = user_id;
+    public TodoRequestDto(Long user_id, String title, String content, LocalTime start_time, LocalTime end_time, Long alarmed, Priority priority, LocalDate todo_date, State state) {
+        this.userId = user_id;
         this.title = title;
         this.content = content;
-        this.start_time = start_time;
-        this.end_time = end_time;
+        this.startTime = start_time;
+        this.endTime = end_time;
         this.alarmed = alarmed;
         this.priority = priority;
-        this.todo_date = todo_date;
+        this.todoDate = todo_date;
+        this.state = state;
     }
 }
