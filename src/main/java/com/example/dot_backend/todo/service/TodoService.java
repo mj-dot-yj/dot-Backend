@@ -8,6 +8,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class TodoService {
     private final TodoRepository todoRepository;
@@ -46,5 +49,15 @@ public class TodoService {
         Todo todo = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
         todo.updateState(todoRequestDto.getState());
         return todo.getId();
+    }
+
+    @Transactional
+    public List<TodoResponseDto> findAllTodoByUserId(Long userId) {
+        List<Todo> todoList = todoRepository.findAllByUserId(userId);
+        List<TodoResponseDto> todoResponseDtoList = new ArrayList<>();
+        for(Todo todo : todoList) {
+            todoResponseDtoList.add(todo.getTodoResponseDto());
+        }
+        return todoResponseDtoList;
     }
 }

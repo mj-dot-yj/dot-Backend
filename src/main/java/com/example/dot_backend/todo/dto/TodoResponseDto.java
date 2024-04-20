@@ -18,9 +18,9 @@ public class TodoResponseDto {
     private Long userId;
     private String title;
     private String content;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm-ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm")
     private LocalTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm-ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH-mm")
     private LocalTime endTime;
     private Long alarmed;
     private Priority priority;
