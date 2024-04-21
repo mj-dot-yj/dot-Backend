@@ -25,6 +25,7 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="userId")
     private Long userId;
     private String title;
     private String content;
