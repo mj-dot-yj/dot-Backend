@@ -3,7 +3,6 @@ package com.example.dot_backend.todo.controller;
 import com.example.dot_backend.common.ApiResponse;
 import com.example.dot_backend.todo.dto.TodoRequestDto;
 import com.example.dot_backend.todo.dto.TodoResponseDto;
-import com.example.dot_backend.todo.repository.TodoRepository;
 import com.example.dot_backend.todo.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/todo")
 public class TodoController {
     private final TodoService todoService;
-    private final TodoRepository todoRepository;
 
     @Autowired
-    public TodoController(TodoService todoService, TodoRepository todoRepository) {
+    public TodoController(TodoService todoService) {
         this.todoService = todoService;
-        this.todoRepository = todoRepository;
     }
 
     @PostMapping("/saveTodo")
@@ -55,9 +53,9 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(todoId));
     }
 
-    @GetMapping("/all/{idx}")
-    public ResponseEntity<ApiResponse<List<TodoResponseDto>>> findAllTodoByUserId(@PathVariable Long idx) {
-        List<TodoResponseDto> todoResponseDtoList = todoService.findAllTodoByUserId(idx);
+    @GetMapping("/all/{idx}/{date}")
+    public ResponseEntity<ApiResponse<List<TodoResponseDto>>> findAllTodoByUserIdAndDate(@PathVariable Long idx, @PathVariable(name="date") LocalDate todoDate) {
+        List<TodoResponseDto> todoResponseDtoList = todoService.findAllTodoByUserIdAndTodoDate(idx, todoDate);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(todoResponseDtoList));
     }
 }
