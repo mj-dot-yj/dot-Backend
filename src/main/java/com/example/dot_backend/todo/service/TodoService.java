@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +53,8 @@ public class TodoService {
     }
 
     @Transactional
-    public List<TodoResponseDto> findAllTodoByUserId(Long userId) {
-        List<Todo> todoList = todoRepository.findAllByUserId(userId);
+    public List<TodoResponseDto> findAllTodoByUserIdAndTodoDate(Long userId, LocalDate todoDate) {
+        List<Todo> todoList = todoRepository.findAllByUserIdAndTodoDate(userId, todoDate);
         List<TodoResponseDto> todoResponseDtoList = new ArrayList<>();
         for(Todo todo : todoList) {
             todoResponseDtoList.add(todo.getTodoResponseDto());

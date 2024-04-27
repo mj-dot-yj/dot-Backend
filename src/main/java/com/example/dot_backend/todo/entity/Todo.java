@@ -38,6 +38,7 @@ public class Todo {
     private Priority priority;
     @Enumerated(EnumType.STRING)
     private State state;
+    @Column(name="todoDate")
     private LocalDate todoDate;
 
 
