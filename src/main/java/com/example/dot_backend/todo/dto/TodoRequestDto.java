@@ -3,6 +3,7 @@ package com.example.dot_backend.todo.dto;
 import com.example.dot_backend.todo.enums.Priority;
 import com.example.dot_backend.todo.entity.Todo;
 import com.example.dot_backend.todo.enums.State;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import java.time.LocalTime;
 @Builder
 public class TodoRequestDto {
     private Long userId;
+    @NotBlank(message = "Enter your todo title")
     private String title;
     private String content;
     private LocalTime startTime;
