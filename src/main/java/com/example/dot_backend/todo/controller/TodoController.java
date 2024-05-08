@@ -3,6 +3,7 @@ package com.example.dot_backend.todo.controller;
 import com.example.dot_backend.common.ApiResponse;
 import com.example.dot_backend.todo.dto.TodoRequestDto;
 import com.example.dot_backend.todo.dto.TodoResponseDto;
+import com.example.dot_backend.todo.enums.State;
 import com.example.dot_backend.todo.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,8 @@ public class TodoController {
     }
 
     @PostMapping("/modify/state/{idx}")
-    public ResponseEntity<ApiResponse<Long>> modifyTodoState(@PathVariable Long idx, @RequestBody TodoRequestDto todoRequestDto) {
-        Long todoId = todoService.modifyTodoState(idx, todoRequestDto);
+    public ResponseEntity<ApiResponse<Long>> modifyTodoState(@PathVariable Long idx, @RequestBody State state) {
+        Long todoId = todoService.modifyTodoState(idx, state);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(todoId));
     }
 
