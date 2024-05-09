@@ -3,6 +3,7 @@ package com.example.dot_backend.todo.service;
 import com.example.dot_backend.todo.dto.TodoRequestDto;
 import com.example.dot_backend.todo.dto.TodoResponseDto;
 import com.example.dot_backend.todo.entity.Todo;
+import com.example.dot_backend.todo.enums.State;
 import com.example.dot_backend.todo.repository.TodoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +47,9 @@ public class TodoService {
     }
 
     @Transactional
-    public Long modifyTodoState(Long id, TodoRequestDto todoRequestDto) {
+    public Long modifyTodoState(Long id, State state) {
         Todo todo = todoRepository.findTodoById(id).orElseThrow(() -> new RuntimeException("no todo"));
-        todo.updateState(todoRequestDto.getState());
+        todo.updateState(state);
         return todo.getId();
     }
 
