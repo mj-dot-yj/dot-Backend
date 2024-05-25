@@ -23,7 +23,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
     private static final String[] ALLOW_URL = {"/", "/member/login", "/member/signUp/**", "/member/findPw/**"};
-    private static final String[] AUTHENTICATED_URL = {"/member/**", "/todo/**", "/habit/**"};
+    private static final String[] AUTHENTICATED_URL = {"/member/**", "/todo/**", "/habit/**", "/challenge/**"};
 
     public SecurityConfig(JwtTokenProvider jwtTokenProvider, JwtProperties jwtProperties) {
         this.jwtTokenProvider = jwtTokenProvider;
