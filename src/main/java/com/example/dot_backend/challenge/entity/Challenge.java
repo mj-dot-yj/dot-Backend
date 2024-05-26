@@ -1,7 +1,6 @@
 package com.example.dot_backend.challenge.entity;
 
 
-import com.example.dot_backend.challenge.enums.Period;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -26,8 +25,7 @@ public class Challenge {
     private Long alarmed;
     private Long count;
     private Long totalCount;
-    @Enumerated(EnumType.STRING)
-    private Period period;
+    private String period;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 }
