@@ -1,7 +1,6 @@
 package com.example.dot_backend.challenge.dto;
 
 import com.example.dot_backend.challenge.entity.Challenge;
-import com.example.dot_backend.challenge.enums.Period;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -19,7 +18,7 @@ public class ChallengeRequestDto {
     private LocalTime endTime;
     private Long alarmed;
     private Long totalCount;
-    private Period period;
+    private String period;
 
     public Challenge toSaveChallenge() {
         return Challenge.builder()
@@ -35,7 +34,7 @@ public class ChallengeRequestDto {
                 .build();
     }
 
-    public ChallengeRequestDto(Long userId, String title, LocalTime startTime, LocalTime endTime, Long alarmed, Long totalCount, Period period) {
+    public ChallengeRequestDto(Long userId, String title, LocalTime startTime, LocalTime endTime, Long alarmed, Long totalCount, String period) {
         this.userId = userId;
         this.title = title;
         this.startTime = startTime;
