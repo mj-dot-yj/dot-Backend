@@ -1,6 +1,7 @@
 package com.example.dot_backend.challenge.entity;
 
 
+import com.example.dot_backend.challenge.dto.ChallengeResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -28,4 +29,18 @@ public class Challenge {
     private String period;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+
+    public ChallengeResponseDto getChallengeResponseDto() {
+        return ChallengeResponseDto.builder()
+                .id(this.id)
+                .userId(this.userId)
+                .title(this.title)
+                .startTime(this.startTime)
+                .endTime(this.endTime)
+                .alarmed(this.alarmed)
+                .count(this.count)
+                .totalCount(this.totalCount)
+                .period(this.period)
+                .build();
+    }
 }
