@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Data
@@ -18,7 +19,7 @@ public class ChallengeRequestDto {
     private LocalTime endTime;
     private Long alarmed;
     private Long totalCount;
-    private String period;
+    private List<String> days;
 
     public Challenge toSaveChallenge() {
         return Challenge.builder()
@@ -29,18 +30,18 @@ public class ChallengeRequestDto {
                 .alarmed(this.alarmed)
                 .count(0L)
                 .totalCount(this.totalCount)
-                .period(this.period)
+                .days(this.days)
                 .createdDate(LocalDateTime.now())
                 .build();
     }
 
-    public ChallengeRequestDto(Long userId, String title, LocalTime startTime, LocalTime endTime, Long alarmed, Long totalCount, String period) {
+    public ChallengeRequestDto(Long userId, String title, LocalTime startTime, LocalTime endTime, Long alarmed, Long totalCount, List<String> days) {
         this.userId = userId;
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.alarmed = alarmed;
         this.totalCount = totalCount;
-        this.period = period;
+        this.days = days;
     }
 }

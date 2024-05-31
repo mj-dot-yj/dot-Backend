@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,5 +22,5 @@ public class ChallengeResponseDto {
     private Long alarmed;
     private Long count;
     private Long totalCount;
-    private String period;
+    private List<String> days;
 }

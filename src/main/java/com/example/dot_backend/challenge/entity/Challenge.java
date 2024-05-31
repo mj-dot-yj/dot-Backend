@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -26,7 +28,12 @@ public class Challenge {
     private Long alarmed;
     private Long count;
     private Long totalCount;
-    private String period;
+    @ElementCollection
+    @CollectionTable(
+            name = "challenge_days",
+            joinColumns = @JoinColumn(name = "challenge_id")
+    )
+    private List<String> days = new ArrayList<>();
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
@@ -40,7 +47,7 @@ public class Challenge {
                 .alarmed(this.alarmed)
                 .count(this.count)
                 .totalCount(this.totalCount)
-                .period(this.period)
+                .days(this.days)
                 .build();
     }
 }
