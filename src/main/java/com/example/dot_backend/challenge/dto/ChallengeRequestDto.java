@@ -1,6 +1,7 @@
 package com.example.dot_backend.challenge.dto;
 
 import com.example.dot_backend.challenge.entity.Challenge;
+import com.example.dot_backend.challenge.enums.State;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class ChallengeRequestDto {
                 .totalCount(this.totalCount)
                 .days(this.days)
                 .createdDate(LocalDateTime.now())
+                .checked(State.NOT_STARTED)
                 .build();
     }
 

@@ -39,4 +39,11 @@ public class ChallengeController {
         List<ChallengeResponseDto> challengeResponseDtoList = challengeService.findAllByUserId(idx);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(challengeResponseDtoList));
     }
+
+    @PostMapping("/modify/state/{idx}")
+    public ResponseEntity<ApiResponse<Long>> modifyChallengeState(@PathVariable Long idx, @RequestBody Long count) {
+        System.out.println("count = " + count);
+        Long challengeId = challengeService.modifyChallengeState(idx, count);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.onSuccess(challengeId));
+    }
 }

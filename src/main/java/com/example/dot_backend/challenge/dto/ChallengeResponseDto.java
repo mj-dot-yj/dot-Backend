@@ -1,5 +1,6 @@
 package com.example.dot_backend.challenge.dto;
 
+import com.example.dot_backend.challenge.enums.State;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +24,5 @@ public class ChallengeResponseDto {
     private Long count;
     private Long totalCount;
     private List<String> days;
+    private State checked;
 }
