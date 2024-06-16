@@ -6,6 +6,7 @@ import com.example.dot_backend.challenge.entity.Challenge;
 import com.example.dot_backend.challenge.repository.ChallengeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,4 +42,22 @@ public class ChallengeService {
         }
         return challengeResponseDtoList;
     }
+
+    @Transactional
+    public Long modifyChallengeState(Long id, Long count) {
+        Challenge challenge = challengeRepository.findChallengeById(id).orElseThrow(() -> new RuntimeException("no challenge"));
+        System.out.println(challenge.getId());
+        challenge.updateState(count);
+        return challenge.getId();
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void updateCheckedStatus() {
+        List<Challenge> challengeList = challengeRepository.findAll();
+        for(Challenge challenge : challengeList) {
+            challenge.updateCheckState();
+        }
+    }
+
 }
