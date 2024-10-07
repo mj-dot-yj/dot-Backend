@@ -18,3 +18,7 @@ dot:
     refreshTokenHeader: X-REFRESH-TOKEN
     accessTokenExpire: 86400000 # 1일
     refreshTokenExpire: 604800000 # 7일
+
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
